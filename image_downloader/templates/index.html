@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Image Downloader</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("{{ url_for('static', filename='Image.jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.1); /* Transparent to blend with background */
+      padding: 30px;
+      width: 400px;
+      margin: 40px;
+      border-radius: 16px;
+      box-shadow: none;
+      text-align: center;
+      backdrop-filter: blur(0px); /* No blur */
+    }
+
+    h2 {
+      color: black;
+      font-size: 26px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    input[type="submit"] {
+      padding: 12px 24px;
+      background-color: #000;
+      color: white;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #333;
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #000;
+      color: white;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #333;
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+    }
+
+    .success { color: #28a745; }
+    .fail { color: #dc3545; }
+    .error { color: #ffc107; }
+
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    #loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #000;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      animation: spin 1s linear infinite;
+      margin: 15px auto;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .footer {
+      margin-top: 25px;
+      font-size: 13px;
+      color: black;
+    }
+  </style>
+  <script>
+    function showLoader() {
+      document.getElementById('loader').style.display = 'block';
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Image Downloader</h2>
+    <form method="POST" onsubmit="showLoader()">
+      <input type="text" name="image_url" placeholder="Enter image URL here..." required><br>
+      <input type="submit" value="Check and Download">
+    </form>
+
+    <div id="loader"></div>
+
+    {% if message %}
+      <div class="status {{ status }}">
+        {% if status == 'success' %}
+          ✅ {{ message }}
+        {% elif status == 'fail' %}
+          ❌ {{ message }}
+        {% elif status == 'error' %}
+          ⚠️ {{ message }}
+        {% endif %}
+      </div>
+    {% endif %}
+
+   {% if status == 'success' %}
+  <img src="{{ image_url }}" alt="Downloaded Image"><br>
+  <a href="{{ url_for('download', filename=filename) }}" class="download-btn">⬇️ Download Image</a>
+  {% endif %}
+
+    <div class="footer">
+      © 2025 | Made by Kaviarasi 
+    </div>
+  </div>
+</body>
+</html>
